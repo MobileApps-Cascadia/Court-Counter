@@ -36,29 +36,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
 
         //Gets the View Model Reference and add databinding
         mScoreViewModel = new ViewModelProvider(this).get(ScoreViewModel.class);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //binding.teamAScore.setText(String.valueOf(mScoreViewModel.getScoreTeamA().getValue()));
 
-        //Callback for when the ScoreTeamA value is changed
+        //ScoreTeamA is LiveData, so we can observe it; assign a callback method for when ScoreTeamA's value is changed
         mScoreViewModel.getScoreTeamA().observe(this, ScoreTeamA -> {
+            //Use the binding (instead of findViewById) to update score in the View
             binding.teamAScore.setText(String.valueOf(mScoreViewModel.getScoreTeamA().getValue()));
         });
 
-        //displayForTeamA(mScoreViewModel.ScoreTeamA.getValue()); // Load from the View Model on config change
-
     }
-// region updates Team A using ViewModel to store data
+// region updates Team A using ViewModel with LiveData to store data
     /**
-     * Update the score for Team A by 1 point using the View Model instance variables
+     * Update the score for Team A using the View Model method
      */
     public void addOneForTeamA(View v) {
-        mScoreViewModel.addOne();
-        //binding.teamAScore.setText(String.valueOf(mScoreViewModel.getScoreTeamA().getValue()));
+        mScoreViewModel.add(1);
+        //no need to update the View
+    }/**
+     * Increase the score for Team A by 2 points.
+     */
+    public void addTwoForTeamA(View v) {
+        mScoreViewModel.add(2);
+    }
+    /**
+     * Increase the score for Team B by 3 points.
+     */
+    public void addThreeForTeamA(View v) {
+        mScoreViewModel.add(3);
     }
 
 // endregion updates Team A using ViewModel to store data
